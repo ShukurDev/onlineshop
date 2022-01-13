@@ -26,8 +26,8 @@ admin.site.register(Profile, ProfileAdmin)
 
 
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ['profile', 'country', 'date_created']
-    list_filter = ['country', 'region', 'city', 'district']
+    list_display = ['profile', 'date_created']
+    list_filter = ['region', 'city', 'district']
     list_per_page = 5
 
 

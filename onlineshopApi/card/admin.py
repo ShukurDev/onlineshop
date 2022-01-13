@@ -1,11 +1,14 @@
 from django.contrib import admin
-from .models import Card, CardItem
+from .models import Cart, CartItem
+
+
 # Register your models here.
 
-@admin.register(Card)
+@admin.register(Cart)
 class CardAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(CardItem)
+
+@admin.register(CartItem)
 class CardItemAdmin(admin.ModelAdmin):
     pass
