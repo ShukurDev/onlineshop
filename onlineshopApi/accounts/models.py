@@ -1,14 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.apps import apps
 
 
 # Create your models here.
+
+
 class BaseUser(AbstractUser):
     age = models.IntegerField(verbose_name='age', null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}" if f"{self.first_name} {self.last_name}" else (self.username or self.email)
+        return f"{self.first_name} {self.last_name}" if f"{self.first_name} {self.last_name}" else (
+                self.username or self.email)
 
     class Meta:
         verbose_name = 'User'
@@ -20,7 +24,8 @@ class Profile(models.Model):
         ('Male', 'Male'),
         ('Female', 'Female'),
     }
-    user = models.OneToOneField(BaseUser, related_name='user', on_delete=models.CASCADE)
+    user = models.OneToOneField(BaseUser, related_name='profile', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60, null=True)
     photo = models.ImageField(null=True, blank=True)
     phone = models.CharField(max_length=13, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -30,6 +35,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            Cart = apps.get_model('card', 'Cart')
+            Cart.objects.create(
+                profile=self.user,
+            )
+        super(Profile, self).save(*args, **kwargs)
 
 
 class Address(models.Model):
@@ -44,10 +57,10 @@ class Address(models.Model):
         ('Samarqand', 'Samarqand'),
         ('Qashqadaryo', 'Qashqadaryo'),
         ('Xorazm', 'Xorazm'),
-        # (9, 'Fargona'),
-        # (10, 'Jizzax'),
-        # (11, 'Toshkent vil'),
-        # (12, 'Buxoro'),
+        ('Fargona', 'Fargona'),
+        ('Jizzax', 'Jizzax'),
+        ('Toshkent vil', 'Toshkent vil'),
+        ('Buxoro', 'Buxoro'),
     }
     region = models.CharField(max_length=100, choices=REGION, default='empty')
     city = models.CharField(max_length=200, null=True, blank=True)

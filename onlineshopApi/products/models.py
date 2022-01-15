@@ -5,6 +5,11 @@ from accounts.models import Profile
 # Create your models here.
 
 class Category(models.Model):
+    LEVEL = {
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3')
+    }
     parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=50, null=True)
     description = models.CharField(max_length=150, null=True)
@@ -13,6 +18,12 @@ class Category(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     # updated = models.DateTimeField(auto_created=True)
     activate = models.BooleanField()
+    level = models.CharField(max_length=200, choices=LEVEL, null=True)
+
+    def get_ancestors(self):
+        if self.parent is None:
+            return Category.objects.none()
+        return Category.objects.filter(pk=self.parent.pk) | self.parent.get_ancestors()
 
     def __str__(self):
         return self.name if self.name else super.__str__()

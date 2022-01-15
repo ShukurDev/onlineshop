@@ -1,16 +1,23 @@
 from django.db import models
 from accounts.models import Profile
 from products.models import Product
+from django.apps import apps
 
 
 # Create your models here.
 class Cart(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='cart_user')
-    completed = models.BooleanField(default=False, null=True, blank=True)
-    #date_created = models.DateTimeField(auto_now_add=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
+    completed = models.BooleanField(default=False)
+
+    # date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.completed)
+        return self.profile.user.first_name
+
+    @property
+    def totalcart(self):
+        total = self.profile.cartitems_set.all()
+        return total
 
 
 class CartItem(models.Model):
@@ -21,4 +28,3 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"cartitem -{str(self.quantity)}"
-

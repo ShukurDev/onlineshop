@@ -6,6 +6,12 @@ from products.models import Product
 # Create your models here.
 
 class Order(models.Model):
+    STATUS = {
+        ('Completed', 'Completed'),
+        ('Delivering', 'Delivering'),
+        ('Delivered', 'Delivered'),
+
+    }
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='order_user')
     ordered = models.BooleanField(default=False, null=True, blank=True)
     address = models.OneToOneField(Address, on_delete=models.SET_NULL, related_name='profile_addresss', null=True)
@@ -20,6 +26,18 @@ class Order(models.Model):
     def __str__(self):
         return f"Order -> by {self.user}"
 
+    @property
+    def cart_total(self):
+        orderitem = self.orderitems.all()
+        total = sum([item.product.price for item in orderitem])
+        return total
+
+    @property
+    def cart_items(self):
+        orderitem = self.orderitems.all()
+        total = sum([item.quantity for item in orderitem])
+        return total
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems')
@@ -30,3 +48,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return str(self.quantity)
 
+    @property
+    def total_sum(self, obj):
+        total = obj.quantity * obj.product.price
+        return total
