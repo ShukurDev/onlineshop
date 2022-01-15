@@ -3,18 +3,6 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BaseUser
-        fields = ['username', 'first_name', 'last_name', 'email']
-
-
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BaseUser
-        fields = ['username', 'email']
-
-
 class UserSerializer(ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -30,14 +18,18 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = BaseUser
         fields = ('password', 'username', 'first_name', 'last_name',)
+        extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
+
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ('id', 'user', 'name', 'photo', 'phone', 'description', 'gender', 'birth_date')
+        extra_kwargs = {'phone': {'read_only': True, 'max_length': 13}}
+
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('profile', 'region', 'city', 'district', 'state', 'address', 'date_created')
+

@@ -13,7 +13,5 @@ urlpatterns = [
     path('products/<int:pk>', views.ProductDetailView.as_view()),
 
 
-
     path('latestproducts', views.LatestProductView.as_view()),
-    path('products/<int:pk>', views.ProductDetailView.as_view()),
 ]

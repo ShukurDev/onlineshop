@@ -5,10 +5,10 @@ from .models import Cart, CartItem
 # Register your models here.
 
 @admin.register(Cart)
-class CardAdmin(admin.ModelAdmin):
-    pass
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'profile']
 
 
 @admin.register(CartItem)
-class CardItemAdmin(admin.ModelAdmin):
-    pass
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['cart', 'product', 'quantity']

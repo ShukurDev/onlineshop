@@ -39,7 +39,8 @@ INSTALLED_APPS = [
 
     # global apps
     'rest_framework',
-    'rest_framework_simplejwt' ,
+    'rest_framework_simplejwt',
+    'drf_yasg',
 
     # local apps
     'accounts.apps.AccountsConfig',

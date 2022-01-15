@@ -14,10 +14,16 @@ class Cart(models.Model):
     def __str__(self):
         return self.profile.user.first_name
 
-    @property
-    def totalcart(self):
-        total = self.profile.cartitems_set.all()
-        return total
+    # @property
+    # def totalcart(self):
+    #     total = self.cart.cartitems.all()
+    #     return total
+
+    # @property
+    # def total_cartitem(self):
+    #     cartitem = self.cart.cartitems.all()
+    #     total = sum([item.quantity for item in cartitem])
+    #     return total
 
 
 class CartItem(models.Model):
@@ -28,3 +34,5 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"cartitem -{str(self.quantity)}"
+
+

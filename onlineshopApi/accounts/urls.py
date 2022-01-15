@@ -9,13 +9,15 @@ router.register(r'registration', CreateUserView)
 urlpatterns = router.urls
 
 urlpatterns += [
+    # jwt authenticated
     path('login',jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/',jwt_views.TokenRefreshView.as_view(),name='token_refresh'),
 
     # Profile
     path('profile', views.ProfileListView.as_view()),
     path('profile/<int:pk>', views.ProfileUpdateView.as_view()),
+    #path('profile/statistic',views.ProfileStatistic.as_view()),
 
-    # address
-    path('address', views.AddressView.as_view()),
+    # address -> list and create
+    path('address/create', views.AddressCreateView.as_view()),
 ]

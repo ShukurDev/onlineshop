@@ -4,15 +4,22 @@ from .models import (
     CartItem,
 )
 from products.serializers import ProductSerializer
+from rest_framework import serializers
 
 
 class CartSerializer(ModelSerializer):
+    # totalcart = serializers.SerializerMethodField()
+    # total_cartitem = serializers.SerializerMethodField()
+
     class Meta:
         model = Cart
-        fields = ['id', 'profile', 'completed', 'totalcart']
+        fields = ['id', 'profile', 'completed']
 
-    def get_totalcart(self, obj):
-        return obj
+    # def get_totalcart(self, obj):
+    #     return obj.totalcart
+    #
+    # def get_total_cartitem(self, obj):
+    #     return obj.total_cartitem
 
 
 class CartItemSerializer(ModelSerializer):
