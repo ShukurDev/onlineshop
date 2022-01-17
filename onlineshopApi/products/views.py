@@ -38,7 +38,6 @@ class Category_ProductsView(generics.ListAPIView):
     serializer_class = Product_Category_Serializer
 
 
-
 class CategoryLevelView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryLevelSerializer
@@ -75,3 +74,12 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class CategoryProductsView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = Product_Category_Serializer
+
+    def filter_queryset(self, queryset):
+        data = queryset.filter(category=self.kwargs['pk'])
+        return data

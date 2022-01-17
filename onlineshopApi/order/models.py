@@ -10,29 +10,34 @@ class Order(models.Model):
         ('Completed', 'Completed'),
         ('Delivering', 'Delivering'),
         ('Delivered', 'Delivered'),
-
     }
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='order_user')
+    user = models.ForeignKey(Profile, null=True, on_delete=models.CASCADE, related_name='order_user')
+    phone = models.IntegerField(null=True, blank=True)
     ordered = models.BooleanField(default=False, null=True, blank=True)
-    address = models.OneToOneField(Address, on_delete=models.SET_NULL, related_name='profile_addresss', null=True)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, related_name='order_address', null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     barcode = models.CharField(max_length=20, null=True, blank=True)
+    status = models.CharField(max_length=100, choices=STATUS, null=True, blank=True)
     region = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=200, null=True, blank=True)
     district = models.CharField(max_length=300, null=True, blank=True)
     state = models.CharField(max_length=200, null=True, blank=True)
+    zip_code = models.CharField(max_length=100, null=True, blank=True)
     target = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return f"Order -> by {self.user}"
 
-    @property
+    def full_name(self):
+        return self.user.name
+
+
     def cart_total(self):
         orderitem = self.orderitems.all()
         total = sum([item.product.price for item in orderitem])
         return total
 
-    @property
+
     def cart_items(self):
         orderitem = self.orderitems.all()
         total = sum([item.quantity for item in orderitem])

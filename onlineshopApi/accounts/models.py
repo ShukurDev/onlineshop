@@ -13,6 +13,15 @@ class BaseUser(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name}" if f"{self.first_name} {self.last_name}" else (
                 self.username or self.email)
+# 1-problem
+
+    # def save(self, *args, **kwargs):
+    #     if not self.id:
+    #         Profile.objects.create(
+    #             user=self.username,
+    #             name=self.last_name,
+    #         )
+    #     super(BaseUser, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'User'
@@ -32,6 +41,7 @@ class Profile(models.Model):
     gender = models.CharField(choices=GENDER, null=True, max_length=50)
     birth_date = models.DateField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+# 2- problem
 
     def __str__(self):
         return f"{self.user.username}"
@@ -70,4 +80,4 @@ class Address(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.profile} - {self.address}"
+        return self.region

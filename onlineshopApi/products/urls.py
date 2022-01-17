@@ -7,7 +7,9 @@ urlpatterns = [
     path('categories/<int:pk>', views.CategoryUpdateView.as_view()),
     path('categories/<slug:slug>', views.CategoryDetailView.as_view()),
     path('categories/<int:pk>/products', views.Category_ProductsView.as_view()),
-    path('categorylevel/<int:pk>', views.CategoryLevelView.as_view()),
+    path('categories/level/<int:pk>', views.CategoryLevelView.as_view()),
+    path('categories/products/<int:pk>', views.CategoryProductsView.as_view()),
+
     # product
     path('products', views.ProductView.as_view()),
     path('products/<int:pk>', views.ProductDetailView.as_view()),

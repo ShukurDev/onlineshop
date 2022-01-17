@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, OrderStatisSerializer
 from rest_framework import generics, views
 from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
 
-class OrderView(generics.ListCreateAPIView):
+# 1 ta problem
+class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
 
 
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -18,10 +18,15 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
 
 
+class OrderStatisView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderStatisSerializer
+
+
 class OrderItemView(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
 
 class OrderItemStatis(generics.ListAPIView):

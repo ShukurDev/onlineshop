@@ -8,8 +8,10 @@ from rest_framework.generics import get_object_or_404
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'parent', 'description', 'slug', 'date_created', 'activate']
+        fields = ('id', 'parent', 'description', 'slug', 'level', 'total_product_quantity', 'date_created', 'activate')
 
+    def get_total_product(self, obj):
+        return obj.total_product
         # slug = serializers.HyperlinkedModelSerializer(
         #     read_only=True,
         #     lookup_field='slug'
@@ -60,13 +62,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('id', 'category', 'title', 'price', 'photo', 'description', 'date_created',)
+        fields = ('id', 'category', 'title', 'price', 'photo', 'description', 'date_created')
 
 
 class CategoryLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'parent', 'name', 'slug')
+        fields = ('id', 'parent', 'name', 'slug', 'level')
 
     # def get_category(self, category):
     #     categories = category.objects.filter(level=self.initial_data.pk)
@@ -84,7 +86,7 @@ class Product_Category_Serializer(serializers.ModelSerializer):
     #     category_id = get_object_or_404(Category, id=validated_data.get('category_id'))
     #     return category_id
 
-    def get_category_id(self, product):
-        products = product.product.filter(id=self.category).all()
-
-        return products
+    # def get_category_id(self, product):
+    #     products = product.product.filter(id=self.category).all()
+    #
+    #     return products

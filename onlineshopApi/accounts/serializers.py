@@ -7,12 +7,14 @@ class UserSerializer(ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
+        print("working 1")
         user = BaseUser.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
+            first_name=validated_data.get("first_name", ""),
+            last_name=validated_data.get("last_name", ""),
         )
+        print("working 2")
         return user
 
     class Meta:
@@ -22,10 +24,32 @@ class UserSerializer(ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+
     class Meta:
         model = Profile
         fields = ('id', 'user', 'name', 'photo', 'phone', 'description', 'gender', 'birth_date')
         extra_kwargs = {'phone': {'read_only': True, 'max_length': 13}}
+
+    def create(self, validated_data):
+        user = BaseUser.objects.create(**validated_data)
+        Profile.objects.create(user=user)
+        return user
+
+    # def create(self, validated_data):
+    #     user_data = validated_data.pop("user")
+    #     user_serializer = UserSerializer(data=user_data)
+    #     if user_serializer.is_valid():
+    #         user = user_serializer.save()
+    #         profile_serializer = ProfileSerializer(data=validated_data)
+    #         if profile_serializer.is_valid():
+    #             profile = profile_serializer.save(user=user)
+    #             return profile
+    #         else:
+    #             print(profile_serializer.errors)
+    #     else:
+    #         print(user_serializer.errors)
+    #     return None
 
 
 class AddressSerializer(serializers.ModelSerializer):
